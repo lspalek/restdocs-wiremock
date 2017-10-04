@@ -119,11 +119,14 @@ final class WireMockJsonSnippet implements Snippet {
 				List<String> values = e.getValue();
 				if (!values.isEmpty()) {
 					String mediaType = values.get(0);
-					// TODO : use proper MediaType parsing, e.g. from guava.
+					// TODO : use proper MediaType parsing
 					if(mediaType.contains("+")) {
 						mediaType = mediaType.replaceAll(".*[+]","");
 					} else {
 						mediaType = mediaType.replaceAll(".*/","");
+					}
+					if(mediaType.contains(";")) {
+						mediaType = mediaType.replaceAll(";.*","");
 					}
 					requestHeaders.put(e.getKey(), Maps.of("contains", mediaType));
 				}
