@@ -46,13 +46,12 @@ dependencies {
 }
 ```
 
-Spring Boot 1.3.x users: Please make sure you use the current release of Spring REST Docs, which is 
-`1.1.2.RELEASE` as of this writing. The `1.0.x.RELEASE`, included with Spring Boot 1.3 is not compatible with this plugin.
+Spring Boot 1.3.x users: Please make sure you use Spring REST Docs `1.1.+` or newer. The `1.0.x.RELEASE`, included with Spring Boot 1.3 is not compatible with this plugin.
 The example below shows how to set Spring REST Docs to this version, when using Spring dependency management.
 
 ```groovy
 dependencyManagement.imports {
-    ext['spring-restdocs.version'] = '1.1.2.RELEASE'
+    ext['spring-restdocs.version'] = '1.2.2.RELEASE'
 }
 ```
 
@@ -60,7 +59,7 @@ When using maven:
 
 ```xml
 <properties>
-	<spring-restdocs.version>1.1.2.RELEASE</spring-restdocs.version>
+	<spring-restdocs.version>1.2.2.RELEASE</spring-restdocs.version>
 </properties>
 <dependency>
 	<groupId>com.epages</groupId>
@@ -181,7 +180,7 @@ transitive versions coming in through maven dependencies, you need to add an exp
 project, like shown in the following gradle example:
 
 ```groovy
-  testCompile('com.github.tomakehurst:wiremock:2.3.1')
+  testCompile('com.github.tomakehurst:wiremock:2.8.0')
 ```
 
 ### Configuring your test to use the WireMock stubs
