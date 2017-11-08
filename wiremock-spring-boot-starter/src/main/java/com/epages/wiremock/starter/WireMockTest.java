@@ -49,4 +49,8 @@ public @interface WireMockTest {
 	 * Sets WireMock to a fixed port. By default WireMock is started on a dynamic port.
 	 */
 	int port() default 0;
+
+	boolean record() default false;
+
+	String targetBaseUrl() default "";
 }
