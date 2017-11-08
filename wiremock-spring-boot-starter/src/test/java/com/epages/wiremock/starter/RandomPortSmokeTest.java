@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,11 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 @WireMockTest
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@Configuration
 public class RandomPortSmokeTest {
 
 	@Autowired
-	private WireMockServer server;
+	public WireMockServer server;
 
 	@Test
 	public void check_server_availability() {

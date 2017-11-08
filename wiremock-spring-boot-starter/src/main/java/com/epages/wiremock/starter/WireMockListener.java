@@ -1,7 +1,5 @@
 package com.epages.wiremock.starter;
 
-import static com.github.tomakehurst.wiremock.recording.RecordingStatus.Recording;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -13,12 +11,9 @@ import org.springframework.test.context.MergedContextConfiguration;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.util.StringUtils;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.common.ClasspathFileSource;
-import com.github.tomakehurst.wiremock.extension.StubMappingTransformer;
-import com.github.tomakehurst.wiremock.recording.RecordSpecBuilder;
 import com.github.tomakehurst.wiremock.standalone.JsonFileMappingsSource;
 
 class WireMockListener extends AbstractTestExecutionListener implements Ordered {
@@ -34,16 +29,7 @@ class WireMockListener extends AbstractTestExecutionListener implements Ordered 
 		ConfigurableApplicationContext applicationContext = (ConfigurableApplicationContext) testContext
 				.getApplicationContext();
 
-		final WireMockServer wireMockServer = applicationContext.getBean(WireMockServer.class);
-		wireMockServer.start();
-
-		if (wireMockAnnotation.record() && !StringUtils.isEmpty(wireMockAnnotation.targetBaseUrl())) {
-
-			wireMockServer.startRecording(new RecordSpecBuilder()
-					.forTarget(wireMockAnnotation.targetBaseUrl())
-					.transformers(new ArrayList<>(wireMockServer.getOptions().extensionsOfType(StubMappingTransformer.class).keySet()))
-			);
-		}
+		applicationContext.getBean(WireMockServer.class).start();
 	}
 
 	@Override
@@ -68,14 +54,16 @@ class WireMockListener extends AbstractTestExecutionListener implements Ordered 
 
 	@Override
 	public void beforeTestMethod(TestContext testContext) throws Exception {
-		if (wireMockAnnotation == null) {
+		if(wireMockAnnotation == null) {
 			return;
 		}
 		WireMockTest methodAnnotation = testContext.getTestMethod().getAnnotation(WireMockTest.class);
 		
-		String stubPath = this.wireMockAnnotation.stubPath();
-
-		if (methodAnnotation != null) {
+		String stubPath = "";
+		if(this.wireMockAnnotation.stubPath() != null) {
+			stubPath = this.wireMockAnnotation.stubPath();
+		}
+		if (methodAnnotation != null && methodAnnotation.stubPath() != null) {
 			stubPath += "/" + methodAnnotation.stubPath();
 		}
 
@@ -83,16 +71,10 @@ class WireMockListener extends AbstractTestExecutionListener implements Ordered 
 				.getApplicationContext();
 
 		WireMockServer server = applicationContext.getBean(WireMockServer.class);
-		if (!isWireMockRecording(server)) {
-			server.resetMappings();
-			if (!stubPath.isEmpty()) {
-				server.loadMappingsUsing(new JsonFileMappingsSource(new ClasspathFileSource(stubPath)));
-			}
+		server.resetMappings();
+		if(! stubPath.isEmpty()) {
+			server.loadMappingsUsing(new JsonFileMappingsSource(new ClasspathFileSource(stubPath)));
 		}
-	}
-
-	private boolean isWireMockRecording(WireMockServer server) {
-		return server.getRecordingStatus().getStatus().equals(Recording);
 	}
 
 	@Override
@@ -103,10 +85,7 @@ class WireMockListener extends AbstractTestExecutionListener implements Ordered 
 		ConfigurableApplicationContext applicationContext = (ConfigurableApplicationContext) testContext
 				.getApplicationContext();
 
-		WireMockServer wireMockServer = applicationContext.getBean(WireMockServer.class);
-		if (!isWireMockRecording(wireMockServer)) {
-			wireMockServer.resetToDefaultMappings();
-		}
+		applicationContext.getBean(WireMockServer.class).resetToDefaultMappings();
 	}
 
 	@Override
@@ -117,13 +96,7 @@ class WireMockListener extends AbstractTestExecutionListener implements Ordered 
 		ConfigurableApplicationContext applicationContext = (ConfigurableApplicationContext) testContext
 				.getApplicationContext();
 
-		if (applicationContext.getBeanNamesForType(WireMockServer.class).length > 0) {
-			WireMockServer wireMockServer = applicationContext.getBean(WireMockServer.class);
-			if (isWireMockRecording(wireMockServer)) {
-				wireMockServer.stopRecording();
-			}
-			wireMockServer.stop();
-		}
+		applicationContext.getBean(WireMockServer.class).stop();
 	}
 
 	private void addPropertySourceProperties(TestContext testContext, String[] properties) {
