@@ -87,7 +87,7 @@ public class NotesController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	void delete(@PathVariable("id") long id) {
-		this.noteRepository.delete(id);
+		this.noteRepository.deleteById(id);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

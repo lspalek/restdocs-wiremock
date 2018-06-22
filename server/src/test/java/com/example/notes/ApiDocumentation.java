@@ -34,6 +34,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -144,7 +145,7 @@ public class ApiDocumentation {
 					linkWithRel("notes").description("The <<resources-notes,Notes resource>>"),
 					linkWithRel("tags").description("The <<resources-tags,Tags resource>>")),
 				responseFields(
-					fieldWithPath("_links").description("<<resources-index-links,Links>> to other resources"))));
+						subsectionWithPath("_links").description("<<resources-index-links,Links>> to other resources"))));
 	}
 
 	@Test
@@ -160,7 +161,7 @@ public class ApiDocumentation {
 			.andExpect(status().isOk())
 			.andDo(this.documentationHandler.document(
 				responseFields(
-					fieldWithPath("_embedded.notes").description("An array of <<resources-note, Note resources>>"))));
+						subsectionWithPath("_embedded.notes").description("An array of <<resources-note, Note resources>>"))));
 	}
 
 	@Test
@@ -233,7 +234,7 @@ public class ApiDocumentation {
 				responseFields(
 					fieldWithPath("title").description("The title of the note"),
 					fieldWithPath("body").description("The body of the note"),
-					fieldWithPath("_links").description("<<resources-note-links,Links>> to other resources"))));
+					subsectionWithPath("_links").description("<<resources-note-links,Links>> to other resources"))));
 
 	}
 
@@ -249,9 +250,9 @@ public class ApiDocumentation {
 		this.mockMvc
 			.perform(get("/tags"))
 			.andExpect(status().isOk())
-			.andDo(this.documentationHandler.document(
-				responseFields(
-					fieldWithPath("_embedded.tags").description("An array of <<resources-tag,Tag resources>>"))));
+				.andDo(this.documentationHandler.document(
+						responseFields(
+								subsectionWithPath("_embedded.tags").description("An array of <<resources-tag,Tag resources>>"))));
 	}
 
 	@Test
@@ -346,9 +347,9 @@ public class ApiDocumentation {
 				links(
 					linkWithRel("self").description("This <<resources-tag,tag>>"),
 					linkWithRel("tagged-notes").description("The <<resources-tagged-notes,notes>> that have this tag")),
-				responseFields(
-					fieldWithPath("name").description("The name of the tag"),
-					fieldWithPath("_links").description("<<resources-tag-links,Links>> to other resources"))));
+					responseFields(
+							fieldWithPath("name").description("The name of the tag"),
+							subsectionWithPath("_links").description("<<resources-tag-links,Links>> to other resources"))));
 	}
 
 	@Test
