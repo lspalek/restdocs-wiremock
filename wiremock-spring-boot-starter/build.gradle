@@ -37,6 +37,10 @@ task sourceJar(type: Jar) {
     from sourceSets.main.allJava
 }
 
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
 bootRepackage.enabled = false
 
 publishing {
@@ -49,6 +53,7 @@ publishing {
             artifact sourceJar {
                 classifier 'sources'
             }
+            artifact javadocJar
         }
     }
 }
@@ -93,7 +98,7 @@ modifyPom {
 extraArchive {
     sources = true
     tests = false
-    javadoc = false
+    javadoc = true
 }
 
 nexus {
