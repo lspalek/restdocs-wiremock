@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.11.0"
     }
 }
 
@@ -11,6 +12,7 @@ plugins {
     id 'pl.allegro.tech.build.axion-release' version '1.9.1'
     id 'com.github.ben-manes.versions' version '0.20.0'
     id 'publishing'
+    id 'io.codearte.nexus-staging' version '0.11.0'
 }
 
 repositories {
@@ -31,6 +33,12 @@ scmVersion {
 allprojects {
     project.version = scmVersion.version
 }
+
+nexusStaging {
+    packageGroup = "com.epages"
+}
+
+
 
 publish.dependsOn(':restdocs-wiremock:uploadArchives')
 publish.dependsOn(':wiremock-spring-boot-starter:uploadArchives')
