@@ -38,7 +38,28 @@ nexusStaging {
     packageGroup = "com.epages"
 }
 
+task setupVariables << {
+    def nexusUsername = project.findProperty("nexusUsername") ?: System.getenv("nexusUsername")
+    def nexusPassword = project.findProperty("nexusPassword") ?: System.getenv("nexusPassword")
+    def signingKeyId = project.findProperty("signing.keyId") ?: System.getenv("signing.keyId")
+    def signingPassword = project.findProperty("signing.password") ?: System.getenv("signing.password")
+    def signingSecretKeyRingFile = project.findProperty("signing.secretKeyRingFile") ?: System.getenv("signing.secretKeyRingFile")
 
+    if (!nexusUsername || !nexusPassword) {
+        throw new RuntimeException("nexusUsername and/or nexusPassword are not defined environment variables")
+    }
 
+    if (!signingKeyId || !signingPassword || !signingSecretKeyRingFile) {
+        throw new RuntimeException("signing keyId and/or password and/or secretKeyRingFile are not defined environment variables")
+    }
+
+    System.properties.setProperty("nexusUsername", nexusUsername)
+    System.properties.setProperty("nexusPassword", nexusPassword)
+    System.properties.setProperty("signing.keyId", signingKeyId)
+    System.properties.setProperty("signing.password", signingPassword)
+    System.properties.setProperty("signing.secretKeyRingFile", signingSecretKeyRingFile)
+}
+
+publish.dependsOn('setupVariables')
 publish.dependsOn(':restdocs-wiremock:uploadArchives')
 publish.dependsOn(':wiremock-spring-boot-starter:uploadArchives')
