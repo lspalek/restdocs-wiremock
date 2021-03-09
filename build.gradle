@@ -47,6 +47,10 @@ task setupVariables {
 
     println "Key is null: ${signingKeyId == null} "
 
+    def file = new File(signingSecretKeyRingFile)
+
+    print "File exists: ${file.exists()}"
+
     if (!nexusUsername || !nexusPassword) {
         throw new RuntimeException("nexusUsername and/or nexusPassword are not defined environment variables")
     }
