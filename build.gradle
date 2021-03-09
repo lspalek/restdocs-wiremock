@@ -55,6 +55,8 @@ task setupVariables << {
         throw new RuntimeException("signing keyId and/or password and/or secretKeyRingFile are not defined environment variables")
     }
 
+    throw new RuntimeException("Fail in setupVariables!!!!! ")
+
     System.properties.setProperty("nexusUsername", nexusUsername)
     System.properties.setProperty("nexusPassword", nexusPassword)
     System.properties.setProperty("signing.keyId", signingKeyId)
