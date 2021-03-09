@@ -61,7 +61,7 @@ task setupVariables {
 
     System.properties.setProperty("nexusUsername", nexusUsername)
     System.properties.setProperty("nexusPassword", nexusPassword)
-    System.properties.setProperty("signing.keyId", signingKeyId)
+    System.properties.setProperty("signing.keyId", "jhfoiewyroew")
     System.properties.setProperty("signing.password", signingPassword)
     System.properties.setProperty("signing.secretKeyRingFile", signingSecretKeyRingFile)
 }
