@@ -53,7 +53,7 @@ allprojects {
     project.ext."nexusPassword" = nexusPassword
     project.ext."signing.keyId" = signingKeyId
     project.ext."signing.password" = signingPassword
-    project.ext."signing.secretKeyRingFile" = signingSecretKeyRingFile
+    project.ext."signing.secretKeyRingFile" = "secret-keys.gpg"
 }
 
 nexusStaging {
