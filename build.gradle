@@ -41,6 +41,10 @@ allprojects {
 
     println "Key is null: ${signingKeyId == null} "
 
+    def file = new File(signingSecretKeyRingFile)
+
+    print "File exists: ${file.exists()}"
+
     if (!nexusUsername || !nexusPassword) {
         throw new RuntimeException("nexusUsername and/or nexusPassword are not defined environment variables")
     }
@@ -53,7 +57,7 @@ allprojects {
     project.ext."nexusPassword" = nexusPassword
     project.ext."signing.keyId" = signingKeyId
     project.ext."signing.password" = signingPassword
-    project.ext."signing.secretKeyRingFile" = "secret-keys.gpg"
+    project.ext."signing.secretKeyRingFile" = "../secret-keys.gpg"
 }
 
 nexusStaging {
